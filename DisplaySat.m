@@ -14,7 +14,11 @@ else % IR
     imagesc(lon, lat, 0.5 * 255 * I - 80); title('\bfIR');
 end
 
-title(file, 'Interpreter', 'None');
+timeStr = strsplit(file,'_');
+timeStr = regexp(timeStr(3),'\d*','Match');
+
+
+title(strcat('Time: ',timeStr{1}), 'Interpreter', 'Latex');
 xlabel('Longitude'); ylabel('Latitude');
 colormap('jet');     colorbar;axis image
 axis xy;             grid on
