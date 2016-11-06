@@ -33,7 +33,7 @@ for ii = iFrame-floor(imNum/2):iFrame+ceil(imNum/2)-1 %1 : L
     I            = LoadSat(fileName, imageType);
         
 %     subplot(sqrt(imNum),sqrt(imNum),jj);
-    DisplaySat(fileName,imageType);
+%     DisplaySat(fileName,imageType);
 %     xlim([xCb-3 xCb+3]) % Long
 %     ylim([yCb-3 yCb+3]) % Lat
 
@@ -64,7 +64,7 @@ args.eps     = 1e4;%4000;
 embedding    = calcEmbedding( dist , args );
 
 %%
-idxCb                  = [xCb yCb]; % 35.09 -0.77; 21.35 -0.224];
+idxCb                  = [xCb yCb]; % [35.09 -0.77; 21.35 -0.224];
 [patchInCb, patchNoCb] =  getPatchesInCb(idxCb,imNum,nx,ny,nz);
 
 

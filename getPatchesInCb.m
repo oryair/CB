@@ -19,16 +19,16 @@ end
 
 % debug
 % recIm = zeros(1024,1024,imNum);
-for  kk = 1:imNum/nz
-    for zz = 1:nz;
-        jj            = (zz-1)*nx*ny + 1;
-        mm            = (kk-1)*1024^2/(nx*ny) + 1;
-        curI          = patchInCb(jj:jj+nx*ny-1,mm:mm+1024^2/(nx*ny)-1);
-        recIm         = col2im(curI,[nx ny],[1024 1024],'distinct');
-        figure;
-        imshow(recIm);
-    end
-end
+% for  kk = 1:imNum/nz
+%     for zz = 1:nz;
+%         jj            = (zz-1)*nx*ny + 1;
+%         mm            = (kk-1)*1024^2/(nx*ny) + 1;
+%         curI          = patchInCb(jj:jj+nx*ny-1,mm:mm+1024^2/(nx*ny)-1);
+%         recIm         = col2im(curI,[nx ny],[1024 1024],'distinct');
+%         figure;
+%         imshow(recIm);
+%     end
+% end
 
 
 [~,patchInCb]        = ind2sub(size(patchInCb),find(patchInCb));
