@@ -1,5 +1,4 @@
-clc;
-clear all
+clear;
 close all hidden
 
 CB = false;
@@ -16,31 +15,32 @@ else
     % create synthetic example
     M      = 300;
     N      = M;
-    x1     = round(3*M/4);
-    y1     = round(3*M/4);
-    x2     = round(M/4);
-    y2     = round(M/4);
-    shift  = 5;
+    x1     = round(2*M/4);
+    y1     = round(1*M/4);
+    x2     = round(2*M/4);
+    y2     = round(3*M/4);
+    shift  = -5;
     data   = zeros(M,M,2);
 
     data(x1,y1,1)                 = 1;
-    data(x1+shift,y1+shift,2)     = 1;
-    data(x2,y2,1)                 = 1;
+    data(x1-shift,y1-shift,2)     = 1;
+%     data(x2,y2,1)                 = 1;
 
     se1               = strel('disk',30);
     se2               = strel('disk',40);
     data(:,:,1)       = imdilate(data(:,:,1),se1);
     temp              = zeros(M);
-    temp(x2,y2,1)     = 1;  
+%     temp(x2,y2,1)     = 1;  
     data(:,:,2)       = imdilate(data(:,:,2),se1) + imdilate(temp,se2);
 end
 
 % find motion vectors
-blockS          = 15;
+blockS          = 53;
 hbm             = vision.BlockMatcher('ReferenceFrameSource',...
                 'Input port','BlockSize',[blockS blockS],'Overlap',[blockS-1 blockS-1]);
 hbm.OutputValue = 'Horizontal and vertical components in complex form';
 motion          = step(hbm,data(:,:,1),data(:,:,2));
+% motion          = opticalFlow(data(:,:,1),data(:,:,2));
 halphablend     = vision.AlphaBlender;
 
 img12           = step(halphablend,data(:,:,1),data(:,:,2));
@@ -53,6 +53,8 @@ imagesc(img12)
 [X,Y]           = meshgrid(1:5:N,1:5:M);
 Vx              = real(motion(1:5:M,1:5:N));
 Vy              = imag(motion(1:5:M,1:5:N));
+% Vx              = motion.Vx(1:5:M,1:5:N);
+% Vy              = motion.Vy(1:5:M,1:5:N);
 
 figure;
 imagesc(img12)
@@ -62,6 +64,7 @@ quiver(X,Y,Vx,Vy,5)
 
 
 div = divergence(real(motion),imag(motion));
+div = divergence(motion.Vx,motion.Vy);
 figure;
 imagesc(div);
 title('Divergence')

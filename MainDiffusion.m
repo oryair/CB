@@ -3,7 +3,10 @@ close all;
 
 %%
 set(0,'defaulttextinterpreter','latex')
-dirExp      = 'C:\Users\salmogl\Documents\Data\CB\cb_examples\example2\'; %'./cb_examples/example1/IR/';
+% dirExp      = 'C:\Users\salmogl\Documents\Data\CB\cb_examples\example2\'; %'./cb_examples/example1/IR/';
+% dirExp      = 'C:\CB_Data\cb_examples\example1\'
+dirExp      = 'C:\Users\Oryair\Desktop\Workarea\Alon Amar\data\cb_examples\example2\'; %'./cb_examples/example1/IR/';
+% dirExp      = 'C:\Users\Oryair\Desktop\Workarea\Alon Amar\data\cb_examples\exampleFake\'; %'./cb_examples/example1/IR/';
 imageType   = 1;
 
 if (imageType)
@@ -23,10 +26,10 @@ mTemp     = LoadSat(fileName, imageType);
 
 imNum     = 30;
 data      = zeros([size(mTemp), imNum]);
-[xCb, yCb, iFrame] = getCbCoor(dirExp,imageType);
+[xCb, yCb, iFrame] = getCbCoor(dirExp, imageType);
 
 % figure;
-jj        = 1;
+jj = 1;
 for ii = iFrame-floor(imNum/2):iFrame+ceil(imNum/2)-1 %1 : L
     
     fileName     = [dirName vList(ii).name];
@@ -38,7 +41,7 @@ for ii = iFrame-floor(imNum/2):iFrame+ceil(imNum/2)-1 %1 : L
 %     ylim([yCb-3 yCb+3]) % Lat
 
     data(:,:,jj) = I;
-    jj      = jj + 1;
+    jj           = jj + 1;
 
 %     data(:,:,ii) = im2col(I, [blockLength, blockLength], 'Distinct');
 end
@@ -49,23 +52,17 @@ ny       = 32;
 nz       = 5;
 patches  = get3dPatch(data, nx, ny, nz);
 
+%%
+dist = pdist(patches');
 
 %%
-% addpath(genpath('C:/Users/Oryair/OneDrive/Technion/Master/Ronen/Matlab/3D_Questionnaire'));
-% addpath(genpath('C:/Users/Oryair/OneDrive/Technion/Master/Ronen/Matlab/Matlab_Utils'));
-% addpath('C:\Users\salmogl\Google Drive\Master\MATLAB\3D_Questionnaire');
-% addpath('C:\Users\salmogl\Google Drive\Master\MATLAB\Matlab_Utils');
-
-%%
-dist         = pdist(patches');
-
-%%
-args.eps     = 1e4;%4000;
+% args.eps     = 1e3;%4000;
+args.eps     = 1e2;%4000;
 embedding    = calcEmbedding( dist , args );
 
 %%
-idxCb                  = [xCb yCb]; % [35.09 -0.77; 21.35 -0.224];
-[patchInCb, patchNoCb] =  getPatchesInCb(idxCb,imNum,nx,ny,nz);
+idxCb                              = [xCb yCb]; % [35.09 -0.77; 21.35 -0.224];
+[patchInCb, patchNoCb, tPatchInCb] = getPatchesInCb(idxCb, imNum, nx, ny, nz);
 
 
 %%
@@ -95,3 +92,19 @@ xlabel('$PC_1$','FontSize',fontS)
 ylabel('$PC_2$','FontSize',fontS)
 zlabel('$PC_3$','FontSize',fontS)
 title(sprintf('PCA of Patches: %dX%dX%d',nx,ny,nz),'FontSize',fontS)
+
+%%
+lon = linspace(15,58,1024);
+lat = linspace(38,-9,1024);
+figure; hold on;
+imagesc(lon, lat, data(:,:,round(end/2))); colorbar;
+plot(xCb, yCb, 'kx', 'LineWidth', 3, 'MarkerSize', 16);
+title('Data');
+
+mPatches = tPatchInCb(1:(nx * ny),1:(1024/nx)^2);
+mPatches = col2im(mPatches, [nx, ny], size(mTemp), 'distinct');
+figure; imagesc(mPatches); colorbar;
+title('Mask');
+
+figure; imagesc(~mPatches .* data(:,:,round(end/2))); colorbar;
+title('Data no X');

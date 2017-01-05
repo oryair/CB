@@ -1,4 +1,4 @@
-function [patchInCb, patchNoCb] =  getPatchesInCb(idxCb,imNum,nx,ny,nz)
+function [patchInCb, patchNoCb, tPatchInCb] =  getPatchesInCb(idxCb,imNum,nx,ny,nz)
 
 lon      = linspace(15,58,1024);
 lat      = linspace(38,-9,1024);
@@ -7,13 +7,18 @@ LON      = repmat(LON,[1 1 imNum]);
 LAT      = repmat(LAT,[1 1 imNum]);
 lonPatch = get3dPatch(LON, nx, ny, nz);
 latPatch = get3dPatch(LAT, nx, ny, nz);
-radCb    = 0.75; % [deg]
+% radCb    = 0.75; % [deg]
+radCb    = 1.25; % [deg]
+% radCb    = 5.75; % [deg]
 
 patchInCb = zeros(size(lonPatch));
 for ii = 1:size(idxCb,1)
     
-        patchInCb((lonPatch > idxCb(ii,1) - radCb) & (lonPatch < idxCb(ii,1) + radCb) & ...
-                  (latPatch > idxCb(ii,2) - radCb) & (latPatch < idxCb(ii,2) + radCb)) = 1;
+    x = idxCb(ii,1);
+    y = idxCb(ii,2);
+    
+    patchInCb((abs(lonPatch - x) < radCb) & ...
+              (abs(latPatch - y) < radCb)) = 1;
       
 end
 
@@ -30,7 +35,7 @@ end
 %     end
 % end
 
-
+tPatchInCb           = patchInCb;
 [~,patchInCb]        = ind2sub(size(patchInCb),find(patchInCb));
 patchInCb            = unique(patchInCb);
 patchNoCb            = ones(1,size(latPatch,2));

@@ -4,7 +4,8 @@ clear;
 set(0,'defaulttextinterpreter','latex')
 
 %%
-dirExp      = 'C:\Users\salmogl\Documents\Data\CB\cb_examples\example2\';
+% dirExp      = 'C:\Users\salmogl\Documents\Data\CB\cb_examples\example2\';
+dirExp      = 'C:\Users\Oryair\Desktop\Workarea\Alon Amar\data\cb_examples\example8\'; %'./cb_examples/example1/IR/';
 imageType   = 1;
 
 if (imageType)
@@ -15,7 +16,7 @@ end
 
 vList       = dir([dirName, '*.gif']);
 L           = length(vList);
-blockLength = 32;
+blockLength = 16;
 
 %%
 fileName  = [dirName vList(1).name];
@@ -31,8 +32,8 @@ for ii = 1 : L
 end
 
 %%
-% addpath(genpath('C:/Users/Oryair/OneDrive/Technion/Master/Ronen/Matlab/3D_Questionnaire'));
-% addpath(genpath('C:/Users/Oryair/OneDrive/Technion/Master/Ronen/Matlab/Matlab_Utils'));
+addpath(genpath('C:/Users/Oryair/OneDrive/Technion/Master/Ronen/Matlab/3D_Questionnaire'));
+addpath(genpath('C:/Users/Oryair/OneDrive/Technion/Master/Ronen/Matlab/Matlab_Utils'));
 addpath(genpath('C:\Users\salmogl\Google Drive\Master\MATLAB\3D_Questionnaire'));
 addpath(genpath('C:\Users\salmogl\Google Drive\Master\MATLAB\Matlab_Utils'));
 
@@ -67,3 +68,10 @@ hold on
 scatter3(embedding{3}(cbFrames, 1), embedding{3}(cbFrames, 2), embedding{3}(cbFrames, 3), 100, 'r','Fill'); colorbar;
 title('Questionnare (Axis: frames)') 
 legend('Not CB','CB')
+
+%%
+[Nc, Np, Nf]   = size(data);
+vNp            = zeros(1,Np);
+vNp(patchInCb) = 1;
+PlotTreesAndEmbedding(dual_aff, Trees, {1:Nc, vNp, 1:Nf}, ....
+                      {'Coordinate', 'Patches', 'Frames'});

@@ -3,7 +3,8 @@ close all;
 
 %%
 set(0,'defaulttextinterpreter','latex')
-dirExp      = 'C:\Users\salmogl\Documents\Data\CB\cb_examples\example8\'; %example8
+% dirExp      = 'C:\Users\salmogl\Documents\Data\CB\cb_examples\example1\'; %example8
+dirExp      = 'C:\Users\Oryair\Desktop\Workarea\Alon Amar\data\cb_examples\example2\'; %'./cb_examples/example1/IR/';
 imageType   = 1;
 
 if (imageType)
@@ -32,8 +33,8 @@ set(gca, 'nextplot','replacechildren');
 
 subplot(121)
 DisplaySat(fileName,imageType);
-xlim([xCb-3 xCb+3]) % Long
-ylim([yCb-3 yCb+3]) % Lat
+xlim([xCb(1)-3 xCb(1)+3]) % Long
+ylim([yCb(1)-3 yCb(1)+3]) % Lat
 
 for ii = iFrame-floor(imNum/2):iFrame+ceil(imNum/2)-1 %1 : L
     
@@ -43,8 +44,8 @@ for ii = iFrame-floor(imNum/2):iFrame+ceil(imNum/2)-1 %1 : L
 
     subplot(122)
     DisplaySat(fileName,imageType);
-    xlim([xCb-3 xCb+3]) % Long
-    ylim([yCb-3 yCb+3]) % Lat
+    xlim([xCb(1)-3 xCb(1)+3]) % Long
+    ylim([yCb(1)-3 yCb(1)+3]) % Lat
     
     
     pause(0.007);

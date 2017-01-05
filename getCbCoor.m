@@ -8,16 +8,36 @@ else
     dirName     = strcat(dirExp,'HRV\');
 end
 
-vList          = dir([dirName, '*.gif']);
-L              = length(vList);
-fid            = fopen(locationCbFile);
-C              = textscan(fid,'%s %s %s %s');
-xCb            = str2double(C{1,2}{2});
-yCb            = str2double(C{1,4}{2});
-timeStr        = C{1,3}{4};
+
+vList = dir([dirName, '*.gif']);
+L     = length(vList);
+fid   = fopen(locationCbFile);
+
+xCb   = [];
+yCb   = [];
+
+tline = fgets(fid);
+while ischar(tline)
+%     disp(tline)
+    tline = fgets(fid);
+    if (tline(1) == '~');
+        break;
+    end
+    
+    cLineSplit   = strsplit(tline);
+    xCb(end + 1) = str2double(cLineSplit{2});
+    yCb(end + 1) = str2double(cLineSplit{4});
+end
+tline      = fgets(fid);
+cLineSplit = strsplit(tline);
+timeStr    = cLineSplit{3}
+
 temp           = strsplit(timeStr,':');
 timeStr        = strcat(temp(1),temp(2));
 fclose(fid);
+
+xCb = xCb';
+yCb = yCb';
 
 for ii = 1:L
     
